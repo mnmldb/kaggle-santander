@@ -6,7 +6,10 @@ from logging import getLogger
 TRAIN_DATA = '../input/train.csv'
 TEST_DATA = '../input/test.csv'
 
+
+#logをためる場合の定型文
 logger = getLogger(__name__)
+
 '''
 __name__とは、Pythonのプログラムがどこから呼ばれて実行されているかを格納しているグローバル変数
 Pythonのプログラムは、コマンドラインから(Python xxx.py)直接呼ばれるか、
@@ -34,7 +37,13 @@ def load_test_data():
     logger.debug('exit')
     return df
 
-#コマンドラインから呼ばれた場合の処理
+'''
+Pythonでは、インポートされた際ファイルの中身は自動で実行される
+インポートされた際に自動で実行されないよう、
+以下のようにif __name__ = '__main__'というif文を書く
+このif文の内部は、importされた際には実行されない
+(一方で、コマンドラインから呼ばれた場合は実行される)
+'''
 if __name__ == '__main__':
     print(load_train_data().head())
     print(load_test_data().head())
