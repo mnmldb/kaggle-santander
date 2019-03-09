@@ -73,9 +73,10 @@ if __name__ == '__main__':
 
     #ログ
     logger.info('test data load end{}'.format(x_test.shape))
-    pred_test = clf.predict_proba(x_test) #今回は確率で出力
+    pred_test = clf.predict(x_test) #今回は0 or 1で出力
 
     #-----submit file-----#
+    '''
     #新しくsubmitファイルを作るわけではなく、kaggleから提供されているsampleファイルを上書きする
     #ファイルの読み込み
     df_submit = pd.read_csv(SAMPLE_SUBMIT_FILE) #.sort_values('ID_code') #predictと合わせるため、並べ替えを行っておく
@@ -83,6 +84,13 @@ if __name__ == '__main__':
     df_submit['target'] = pred_test
     #結果の書き出し
     df_submit.to_csv(DIR + 'submit.csv')
+    '''
+    df_submit = pd.DataFrame()
+    df_submit['ID_code'] = df['ID_code'] #test data
+    df_submit['target'] = pred_test #pred_testはnumpy arrayだがそのままDataFrameに格納できる
+
+    #結果の書き出し
+    df_submit.to_csv(DIR + 'submit.csv', index=False)
 
     #ログ
     logger.info('end')

@@ -1,3 +1,5 @@
 .DS_Store
-input
+input/
 *.pyc
+tmp/
+protos/result_tmp/
