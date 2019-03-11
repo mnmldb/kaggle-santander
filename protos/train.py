@@ -1,11 +1,12 @@
 '''
 実行時はprotosディレクトリにおいてpython train.pyとする
+tail -F train.py.logで更新中のログを見れる
 '''
 
 import pandas as pd
 import numpy as np
 import pickle #複数のオブジェクトを1つのまとまりに保存し、後で読み込める
-from tqdm import tqdm
+from tqdm import tqdm #処理の進捗状況をプログレスバーとして表示
 from logging import StreamHandler, DEBUG, Formatter, FileHandler, getLogger
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, ParameterGrid
@@ -57,44 +58,80 @@ if __name__ == '__main__':
     logger.debug('train columns: {} {}'.format(use_cols.shape, use_cols))
     logger.info('data preparation end {}'.format(x_train.shape))
 
+
     #-----Cross Varidation-----# (訓練データを複数に分割して、何回か検証を行い、その平均を取って汎化性能とする)
     #StratifiedKFoldが一番いいらしい (各CVのスプリットで0,1を一定の比率にしてくれる)
     #StratifiedKFoldはユーザーごとにスプリットしないといけない場合や、時系列データには使用してはいけない
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0) #分割は5はほしい、データ大きい場合は3   必ず乱数は固定する
 
-    #結果を格納するリスト
-    list_auc_score = []
-    list_logloss = []
 
-    for train_idx, valid_idx in cv.split(x_train, y_train):
-        #cv.splitで列の行のインデックスが返ってくる
-        #CVで使用しているのは訓練データのみなので注意 (テストデータは使用しない)
+    #-----Grid Search-----# (パラメータの候補値を総当たりで試し、最適値を出す)
+    #パラメータの候補値を辞書に格納
+    #モデルによってパラメータは異なる
+    all_params = {'C': [10**i for i in range(-3, 4)], #C 正則化パラメータは10**i -> logの数値で探すことが多い
+                  'fit_intercept': [True, False],
+                  'penalty': ['l2', 'l1'],
+                  'random_state': [0]}
+
+    #一番スコアが小さかったとき用の初期値を準備
+    min_score = 100
+    min_params = None
+
+    #Grid Searchのループ
+    #tqdmを使うことで、進捗状況を可視化 (イテレータを返す、引数にリストを使用)
+    for params in tqdm(list(ParameterGrid(all_params))): #パラメータの候補値をParameterGridに渡し、ループにする
+        #ログ出力
+        logger.info('params: {}'.format(params))
+        #結果を格納するリスト
+        list_auc_score = []
+        list_logloss = []
+
+        #Cross Validationのループ
+        for train_idx, valid_idx in cv.split(x_train, y_train):
+            #cv.splitで列の行のインデックスが返ってくる
+            #CVで使用しているのは訓練データのみなので注意 (テストデータは使用しない)
+            
+            #xの準備
+            trn_x = x_train.iloc[train_idx, :] #pandas
+            val_x = x_train.iloc[valid_idx, :] #pandas
+            #yの準備
+            trn_y = y_train[train_idx] #numpy array
+            val_y = y_train[valid_idx] #numpy array
+            #モデルの訓練
+            clf = LogisticRegression(**params) #パラメータを可変長で渡す
+            clf.fit(trn_x, trn_y)
+            #予測
+            pred = clf.predict(val_x)
+            #モデルの評価　今回の尺度はloglossとAUCを使用
+            sc_logloss = log_loss(val_y, pred) #log loss
+            sc_auc = roc_auc_score(val_y, pred) #AUC
+            #尺度をリストに格納
+            list_logloss.append(sc_logloss)
+            list_auc_score.append(sc_auc)
+
+            #ループごとにログ出力 (debug level)
+            #メッセージにインデントを入れることでわかりやすくする (tail -F train.py.log で確認するとき)
+            logger.debug('  logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
+
+        #cross validation後の平均値を格納
+        sc_logloss = np.mean(list_logloss) #loglossは小さい方がいい
+        sc_auc = - np.mean(list_auc_score) #aucは大きいほうがいい
         
-        #xの準備
-        trn_x = x_train.iloc[train_idx, :] #pandas
-        val_x = x_train.iloc[valid_idx, :] #pandas
-        #yの準備
-        trn_y = y_train[train_idx] #numpy array
-        val_y = y_train[valid_idx] #numpy array
-        #モデルの訓練
-        clf = LogisticRegression(random_state=0)
-        clf.fit(trn_x, trn_y)
-        #予測
-        pred = clf.predict(val_x)
-        #モデルの評価　今回の尺度はloglossとAUCを使用
-        sc_logloss = log_loss(val_y, pred) #log loss
-        sc_auc = roc_auc_score(val_y, pred) #AUC
-        #尺度をリストに格納
-        list_logloss.append(sc_logloss)
-        list_auc_score.append(sc_auc)
+        #ログ出力
+        logger.info('logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
 
-        #ループごとにログ出力 (debug level)
-        #メッセージにインデントを入れることでわかりやすくする
-        logger.debug('  logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
+        #順次モデルの精度を評価し、以前のものより優れていればAUCとパラメータを上書きする
+        #今回roglossは使用していない
+        if min_score > sc_auc: #マイナスに反転させているため
+            min_score = sc_auc
+            min_params = params
 
-    logger.debug('logloss: {}, auc: {}'.format(np.mean(sc_logloss), np.mean(sc_auc)))
+    #ログ出力
+    logger.info('minimum params: {}'.format(min_params))
+    logger.info('minimum auc: {}'.format(min_score))
 
-    clf = LogisticRegression(random_state=0)
+    #一番良かったパラメータで最後にすべての訓練データでモデルを訓練
+    clf = LogisticRegression(**min_params)
     clf.fit(x_train, y_train)
 
     #ログ

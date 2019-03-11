@@ -270,3 +270,95 @@
  'var_195' 'var_196' 'var_197' 'var_198' 'var_199'] 
 2019-03-11 23:00:36,954 __main__ 58 [INFO][<module>] data preparation end (200000, 200) 
 2019-03-11 23:03:44,155 __main__ 84 [INFO][<module>] logloss: 3.003081965234818, auc: 0.6250844800482731 
+2019-03-11 23:33:59,034 __main__ 44 [INFO][<module>] start 
+2019-03-11 23:34:06,073 __main__ 57 [DEBUG][<module>] train columns: (200,) ['var_0' 'var_1' 'var_2' 'var_3' 'var_4' 'var_5' 'var_6' 'var_7' 'var_8'
+ 'var_9' 'var_10' 'var_11' 'var_12' 'var_13' 'var_14' 'var_15' 'var_16'
+ 'var_17' 'var_18' 'var_19' 'var_20' 'var_21' 'var_22' 'var_23' 'var_24'
+ 'var_25' 'var_26' 'var_27' 'var_28' 'var_29' 'var_30' 'var_31' 'var_32'
+ 'var_33' 'var_34' 'var_35' 'var_36' 'var_37' 'var_38' 'var_39' 'var_40'
+ 'var_41' 'var_42' 'var_43' 'var_44' 'var_45' 'var_46' 'var_47' 'var_48'
+ 'var_49' 'var_50' 'var_51' 'var_52' 'var_53' 'var_54' 'var_55' 'var_56'
+ 'var_57' 'var_58' 'var_59' 'var_60' 'var_61' 'var_62' 'var_63' 'var_64'
+ 'var_65' 'var_66' 'var_67' 'var_68' 'var_69' 'var_70' 'var_71' 'var_72'
+ 'var_73' 'var_74' 'var_75' 'var_76' 'var_77' 'var_78' 'var_79' 'var_80'
+ 'var_81' 'var_82' 'var_83' 'var_84' 'var_85' 'var_86' 'var_87' 'var_88'
+ 'var_89' 'var_90' 'var_91' 'var_92' 'var_93' 'var_94' 'var_95' 'var_96'
+ 'var_97' 'var_98' 'var_99' 'var_100' 'var_101' 'var_102' 'var_103'
+ 'var_104' 'var_105' 'var_106' 'var_107' 'var_108' 'var_109' 'var_110'
+ 'var_111' 'var_112' 'var_113' 'var_114' 'var_115' 'var_116' 'var_117'
+ 'var_118' 'var_119' 'var_120' 'var_121' 'var_122' 'var_123' 'var_124'
+ 'var_125' 'var_126' 'var_127' 'var_128' 'var_129' 'var_130' 'var_131'
+ 'var_132' 'var_133' 'var_134' 'var_135' 'var_136' 'var_137' 'var_138'
+ 'var_139' 'var_140' 'var_141' 'var_142' 'var_143' 'var_144' 'var_145'
+ 'var_146' 'var_147' 'var_148' 'var_149' 'var_150' 'var_151' 'var_152'
+ 'var_153' 'var_154' 'var_155' 'var_156' 'var_157' 'var_158' 'var_159'
+ 'var_160' 'var_161' 'var_162' 'var_163' 'var_164' 'var_165' 'var_166'
+ 'var_167' 'var_168' 'var_169' 'var_170' 'var_171' 'var_172' 'var_173'
+ 'var_174' 'var_175' 'var_176' 'var_177' 'var_178' 'var_179' 'var_180'
+ 'var_181' 'var_182' 'var_183' 'var_184' 'var_185' 'var_186' 'var_187'
+ 'var_188' 'var_189' 'var_190' 'var_191' 'var_192' 'var_193' 'var_194'
+ 'var_195' 'var_196' 'var_197' 'var_198' 'var_199'] 
+2019-03-11 23:34:06,073 __main__ 58 [INFO][<module>] data preparation end (200000, 200) 
+2019-03-11 23:34:06,073 __main__ 82 [INFO][<module>] params: {'C': 0.001, 'fit_intercept': True, 'penalty': 'l2', 'random_state': 0} 
+2019-03-11 23:34:30,333 __main__ 112 [DEBUG][<module>]   logloss: 3.0453892894506818, auc: 0.6100409198829511 
+2019-03-11 23:34:48,992 __main__ 112 [DEBUG][<module>]   logloss: 3.028119713304622, auc: 0.609103543592175 
+2019-03-11 23:35:13,150 __main__ 112 [DEBUG][<module>]   logloss: 2.967751338220279, auc: 0.6110704813896056 
+2019-03-11 23:35:37,458 __main__ 112 [DEBUG][<module>]   logloss: 3.044677831839612, auc: 0.6087435051764265 
+2019-03-11 23:36:00,540 __main__ 112 [DEBUG][<module>]   logloss: 2.9591909237436815, auc: 0.613876692713502 
+2019-03-11 23:36:00,541 __main__ 119 [INFO][<module>] logloss: 3.0090258193117756, auc: -0.610567028550932 
+2019-03-11 23:36:00,541 __main__ 82 [INFO][<module>] params: {'C': 0.001, 'fit_intercept': True, 'penalty': 'l1', 'random_state': 0} 
+2019-03-11 23:36:14,790 __main__ 112 [DEBUG][<module>]   logloss: 3.1757647535514417, auc: 0.5627554986524813 
+2019-03-11 23:36:29,718 __main__ 112 [DEBUG][<module>]   logloss: 3.16885689110992, auc: 0.562203777117857 
+2019-03-11 23:36:44,917 __main__ 112 [DEBUG][<module>]   logloss: 3.1620281173739873, auc: 0.5618729587194655 
+2019-03-11 23:36:59,545 __main__ 112 [DEBUG][<module>]   logloss: 3.171606190725364, auc: 0.5638218738922304 
+2019-03-11 23:37:14,424 __main__ 112 [DEBUG][<module>]   logloss: 3.1413835660356138, auc: 0.5657449170359635 
+2019-03-11 23:37:14,424 __main__ 119 [INFO][<module>] logloss: 3.163927903759265, auc: -0.5632798050835995 
+2019-03-11 23:37:14,424 __main__ 82 [INFO][<module>] params: {'C': 0.001, 'fit_intercept': False, 'penalty': 'l2', 'random_state': 0} 
+2019-03-11 23:37:37,622 __main__ 112 [DEBUG][<module>]   logloss: 3.044525821637568, auc: 0.6100548161059576 
+2019-03-11 23:38:01,302 __main__ 112 [DEBUG][<module>]   logloss: 3.025529389823026, auc: 0.6095871598069793 
+2019-03-11 23:41:03,496 __main__ 45 [INFO][<module>] start 
+2019-03-11 23:41:09,514 __main__ 58 [DEBUG][<module>] train columns: (200,) ['var_0' 'var_1' 'var_2' 'var_3' 'var_4' 'var_5' 'var_6' 'var_7' 'var_8'
+ 'var_9' 'var_10' 'var_11' 'var_12' 'var_13' 'var_14' 'var_15' 'var_16'
+ 'var_17' 'var_18' 'var_19' 'var_20' 'var_21' 'var_22' 'var_23' 'var_24'
+ 'var_25' 'var_26' 'var_27' 'var_28' 'var_29' 'var_30' 'var_31' 'var_32'
+ 'var_33' 'var_34' 'var_35' 'var_36' 'var_37' 'var_38' 'var_39' 'var_40'
+ 'var_41' 'var_42' 'var_43' 'var_44' 'var_45' 'var_46' 'var_47' 'var_48'
+ 'var_49' 'var_50' 'var_51' 'var_52' 'var_53' 'var_54' 'var_55' 'var_56'
+ 'var_57' 'var_58' 'var_59' 'var_60' 'var_61' 'var_62' 'var_63' 'var_64'
+ 'var_65' 'var_66' 'var_67' 'var_68' 'var_69' 'var_70' 'var_71' 'var_72'
+ 'var_73' 'var_74' 'var_75' 'var_76' 'var_77' 'var_78' 'var_79' 'var_80'
+ 'var_81' 'var_82' 'var_83' 'var_84' 'var_85' 'var_86' 'var_87' 'var_88'
+ 'var_89' 'var_90' 'var_91' 'var_92' 'var_93' 'var_94' 'var_95' 'var_96'
+ 'var_97' 'var_98' 'var_99' 'var_100' 'var_101' 'var_102' 'var_103'
+ 'var_104' 'var_105' 'var_106' 'var_107' 'var_108' 'var_109' 'var_110'
+ 'var_111' 'var_112' 'var_113' 'var_114' 'var_115' 'var_116' 'var_117'
+ 'var_118' 'var_119' 'var_120' 'var_121' 'var_122' 'var_123' 'var_124'
+ 'var_125' 'var_126' 'var_127' 'var_128' 'var_129' 'var_130' 'var_131'
+ 'var_132' 'var_133' 'var_134' 'var_135' 'var_136' 'var_137' 'var_138'
+ 'var_139' 'var_140' 'var_141' 'var_142' 'var_143' 'var_144' 'var_145'
+ 'var_146' 'var_147' 'var_148' 'var_149' 'var_150' 'var_151' 'var_152'
+ 'var_153' 'var_154' 'var_155' 'var_156' 'var_157' 'var_158' 'var_159'
+ 'var_160' 'var_161' 'var_162' 'var_163' 'var_164' 'var_165' 'var_166'
+ 'var_167' 'var_168' 'var_169' 'var_170' 'var_171' 'var_172' 'var_173'
+ 'var_174' 'var_175' 'var_176' 'var_177' 'var_178' 'var_179' 'var_180'
+ 'var_181' 'var_182' 'var_183' 'var_184' 'var_185' 'var_186' 'var_187'
+ 'var_188' 'var_189' 'var_190' 'var_191' 'var_192' 'var_193' 'var_194'
+ 'var_195' 'var_196' 'var_197' 'var_198' 'var_199'] 
+2019-03-11 23:41:09,515 __main__ 59 [INFO][<module>] data preparation end (200000, 200) 
+2019-03-11 23:41:09,518 __main__ 84 [INFO][<module>] params: {'C': 0.001, 'fit_intercept': True, 'penalty': 'l2', 'random_state': 0} 
+2019-03-11 23:41:32,022 __main__ 114 [DEBUG][<module>]   logloss: 3.0453892894506818, auc: 0.6100409198829511 
+2019-03-11 23:41:51,831 __main__ 114 [DEBUG][<module>]   logloss: 3.028119713304622, auc: 0.609103543592175 
+2019-03-11 23:42:15,992 __main__ 114 [DEBUG][<module>]   logloss: 2.967751338220279, auc: 0.6110704813896056 
+2019-03-11 23:42:40,375 __main__ 114 [DEBUG][<module>]   logloss: 3.044677831839612, auc: 0.6087435051764265 
+2019-03-11 23:43:03,962 __main__ 114 [DEBUG][<module>]   logloss: 2.9591909237436815, auc: 0.613876692713502 
+2019-03-11 23:43:03,963 __main__ 121 [INFO][<module>] logloss: 3.0090258193117756, auc: -0.610567028550932 
+2019-03-11 23:43:03,963 __main__ 84 [INFO][<module>] params: {'C': 0.001, 'fit_intercept': True, 'penalty': 'l1', 'random_state': 0} 
+2019-03-11 23:43:18,472 __main__ 114 [DEBUG][<module>]   logloss: 3.1757647535514417, auc: 0.5627554986524813 
+2019-03-11 23:43:31,540 __main__ 114 [DEBUG][<module>]   logloss: 3.16885689110992, auc: 0.562203777117857 
+2019-03-11 23:43:46,393 __main__ 114 [DEBUG][<module>]   logloss: 3.1620281173739873, auc: 0.5618729587194655 
+2019-03-11 23:43:59,382 __main__ 114 [DEBUG][<module>]   logloss: 3.171606190725364, auc: 0.5638218738922304 
+2019-03-11 23:44:11,881 __main__ 114 [DEBUG][<module>]   logloss: 3.1413835660356138, auc: 0.5657449170359635 
+2019-03-11 23:44:11,881 __main__ 121 [INFO][<module>] logloss: 3.163927903759265, auc: -0.5632798050835995 
+2019-03-11 23:44:11,882 __main__ 84 [INFO][<module>] params: {'C': 0.001, 'fit_intercept': False, 'penalty': 'l2', 'random_state': 0} 
+2019-03-11 23:44:34,807 __main__ 114 [DEBUG][<module>]   logloss: 3.044525821637568, auc: 0.6100548161059576 
+2019-03-11 23:44:57,158 __main__ 114 [DEBUG][<module>]   logloss: 3.025529389823026, auc: 0.6095871598069793 
