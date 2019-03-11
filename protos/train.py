@@ -57,6 +57,43 @@ if __name__ == '__main__':
     logger.debug('train columns: {} {}'.format(use_cols.shape, use_cols))
     logger.info('data preparation end {}'.format(x_train.shape))
 
+    #-----Cross Varidation-----# (訓練データを複数に分割して、何回か検証を行い、その平均を取って汎化性能とする)
+    #StratifiedKFoldが一番いいらしい (各CVのスプリットで0,1を一定の比率にしてくれる)
+    #StratifiedKFoldはユーザーごとにスプリットしないといけない場合や、時系列データには使用してはいけない
+    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0) #分割は5はほしい、データ大きい場合は3   必ず乱数は固定する
+
+    #結果を格納するリスト
+    list_auc_score = []
+    list_logloss = []
+
+    for train_idx, valid_idx in cv.split(x_train, y_train):
+        #cv.splitで列の行のインデックスが返ってくる
+        #CVで使用しているのは訓練データのみなので注意 (テストデータは使用しない)
+        
+        #xの準備
+        trn_x = x_train.iloc[train_idx, :] #pandas
+        val_x = x_train.iloc[valid_idx, :] #pandas
+        #yの準備
+        trn_y = y_train[train_idx] #numpy array
+        val_y = y_train[valid_idx] #numpy array
+        #モデルの訓練
+        clf = LogisticRegression(random_state=0)
+        clf.fit(trn_x, trn_y)
+        #予測
+        pred = clf.predict(val_x)
+        #モデルの評価　今回の尺度はloglossとAUCを使用
+        sc_logloss = log_loss(val_y, pred) #log loss
+        sc_auc = roc_auc_score(val_y, pred) #AUC
+        #尺度をリストに格納
+        list_logloss.append(sc_logloss)
+        list_auc_score.append(sc_auc)
+
+        #ループごとにログ出力 (debug level)
+        #メッセージにインデントを入れることでわかりやすくする
+        logger.debug('  logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
+
+    logger.debug('logloss: {}, auc: {}'.format(np.mean(sc_logloss), np.mean(sc_auc)))
+
     clf = LogisticRegression(random_state=0)
     clf.fit(x_train, y_train)
 
