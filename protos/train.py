@@ -104,7 +104,7 @@ if __name__ == '__main__':
             pred = clf.predict(val_x)
             #モデルの評価　今回の尺度はloglossとAUCを使用
             sc_logloss = log_loss(val_y, pred) #log loss 小さい方がいい
-            sc_auc = - roc_auc_score(val_y, pred) #AUC　大きいほうがいい (上に合わせるためマイナスをかけている)
+            sc_auc = (-1) * roc_auc_score(val_y, pred) #AUC　大きいほうがいい (上に合わせるためマイナスをかけている)
             #尺度をリストに格納
             list_logloss.append(sc_logloss)
             list_auc_score.append(sc_auc)
