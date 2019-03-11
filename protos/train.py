@@ -112,12 +112,12 @@ if __name__ == '__main__':
             #ループごとにログ出力 (debug level)
             #メッセージにインデントを入れることでわかりやすくする (tail -F train.py.log で確認するとき)
             logger.debug('  logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
+            #break #ここでbreakを入れることでKFold 1回だけでやることも可能 (エラーが起きる場合にこうしてシンプルにしてデバッグする)
 
         #cross validation後の平均値を格納
         sc_logloss = np.mean(list_logloss) #loglossは小さい方がいい
-        sc_auc = - np.mean(list_auc_score) #aucは大きいほうがいい
+        sc_auc = np.mean(list_auc_score) #aucは大きいほうがいい (すでにマイナスはかかっている)
         
-        #ログ出力
         logger.info('logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
 
         #順次モデルの精度を評価し、以前のものより優れていればAUCとパラメータを上書きする
@@ -125,6 +125,10 @@ if __name__ == '__main__':
         if min_score > sc_auc: #マイナスに反転させているため
             min_score = sc_auc
             min_params = params
+
+        #ログ出力
+        logger.info('logloss: {}, auc: {}'.format(sc_logloss, sc_auc))
+        logger.info('current min score: {}, auc: {}'.format(min_score, sc_auc))
 
     #ログ出力
     logger.info('minimum params: {}'.format(min_params))
