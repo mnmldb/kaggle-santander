@@ -11,6 +11,7 @@ from logging import StreamHandler, DEBUG, Formatter, FileHandler, getLogger
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, ParameterGrid
 from sklearn.metrics import log_loss, roc_auc_score, roc_curve, auc
+import xgboost as xgb
 
 #load_data.pyより必要な関数のみを読み込む
 from load_data import load_train_data, load_test_data
@@ -68,10 +69,15 @@ if __name__ == '__main__':
     #-----Grid Search-----# (パラメータの候補値を総当たりで試し、最適値を出す)
     #パラメータの候補値を辞書に格納
     #モデルによってパラメータは異なる
-    all_params = {'C': [10**i for i in range(-3, 4)], #C 正則化パラメータは10**i -> logの数値で探すことが多い
-                  'fit_intercept': [True, False],
-                  'penalty': ['l2', 'l1'],
-                  'random_state': [0]}
+    all_params = {'max_depth': [3, 5, 7], #これは必須、多くて10くらい　
+                  'learning_rate': [0.1], #超重要　まずは0.1くらいの固定で、feature engineeringに時間を割く　ただコンペ終盤では0.01とかにして細かいサーチをしていく
+                  'min_child_weight': [3, 5, 10], #汎化性能、大きいほど上がる（トレードオフとして精度は落ちる）
+                  'n_estimators': [10000],
+                  'colsample_bytree': [0.8, 0.9], #1個の学習器をつくるときにどの割合の特徴を使うか (1だとすべての特徴を使う) 0.5以上の値をサーチするのがよい
+                  'colsample_bylevel': [0.8, 0.9], #学習器だけでなく、木の深さによっても使用する特徴の数を減らす
+                  'reg_alpha': [0, 0.1], #正則化
+                  'max_delta_step': [0.1], #汎化性能
+                  'seed': [0]} 
 
     #一番スコアが小さかったとき用の初期値を準備
     min_score = 100
@@ -85,6 +91,7 @@ if __name__ == '__main__':
         #結果を格納するリスト
         list_auc_score = []
         list_logloss = []
+        list_best_iterations = []
 
         #Cross Validationのループ
         for train_idx, valid_idx in cv.split(x_train, y_train):
@@ -98,16 +105,22 @@ if __name__ == '__main__':
             trn_y = y_train[train_idx] #numpy array
             val_y = y_train[valid_idx] #numpy array
             #モデルの訓練
-            clf = LogisticRegression(**params) #パラメータを可変長で渡す
-            clf.fit(trn_x, trn_y)
+            clf = xgb.XGBClassifier(**params) #パラメータを可変長で渡す
+            clf.fit(trn_x,
+                    trn_y,
+                    eval_set=([val_x, val_y]), #XGBoostではvalidation setを見て、一番いいところでiterationを止めることができる
+                    early_stopping_rounds=10, #何ステップ更新しなかったらiterationを止めるということが指定できる
+                    eval_metric='auc' #評価指標
+            )
             #予測
-            pred = clf.predict(val_x)
+            pred = clf.predict(val_x, ntree_limit=clf.best_ntree_limit)
             #モデルの評価　今回の尺度はloglossとAUCを使用
             sc_logloss = log_loss(val_y, pred) #log loss 小さい方がいい
             sc_auc = (-1) * roc_auc_score(val_y, pred) #AUC　大きいほうがいい (上に合わせるためマイナスをかけている)
             #尺度をリストに格納
             list_logloss.append(sc_logloss)
             list_auc_score.append(sc_auc)
+            list_best_iterations.append(clf.best_iteration)
 
             #ループごとにログ出力 (debug level)
             #メッセージにインデントを入れることでわかりやすくする (tail -F train.py.log で確認するとき)
@@ -115,6 +128,7 @@ if __name__ == '__main__':
             #break #ここでbreakを入れることでKFold 1回だけでやることも可能 (エラーが起きる場合にこうしてシンプルにしてデバッグする)
 
         #cross validation後の平均値を格納
+        params['n_estimators'] = int(np.mean(list_best_iterations)
         sc_logloss = np.mean(list_logloss) #loglossは小さい方がいい
         sc_auc = np.mean(list_auc_score) #aucは大きいほうがいい (すでにマイナスはかかっている)
         
@@ -135,7 +149,7 @@ if __name__ == '__main__':
     logger.info('minimum auc: {}'.format(min_score))
 
     #一番良かったパラメータで最後にすべての訓練データでモデルを訓練
-    clf = LogisticRegression(**min_params)
+    clf = xgb.XGBClassifier(**min_params)
     clf.fit(x_train, y_train)
 
     #ログ
