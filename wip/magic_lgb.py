@@ -79,7 +79,7 @@ num_folds = 11
 features = [c for c in train_df.columns if c not in ['ID_code', 'target']]
 
 folds = KFold(n_splits=num_folds, random_state=44000)
-oof = np.zeros(len(train_df))
+oof = np.zeros(len(train_df)) #oof: out of fold
 getVal = np.zeros(len(train_df))
 predictions = np.zeros(len(target))
 feature_importance_df = pd.DataFrame()
