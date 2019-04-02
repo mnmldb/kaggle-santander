@@ -37,8 +37,8 @@ quadratic = PolynomialFeatures(degree = 2) #instance to create quadratic feature
 quadratic_train = quadratic.fit_transform(train_df[train_features].values) # (200000, 20301) 20301 = 200C2 + 200 + 200
 quadratic_test = quadratic.fit_transform(test_df[test_features].values)
 
-q_train_df = pd.concat(train_df[['ID_code', 'target']], pd.DataFrame(quadratic_train[:,1:]), axis=1) # delete first column of quadratic_train
-q_test_df = pd.concat(test_df['ID_code'], pd.DataFrame(quadratic_test[:,1:]), axis=1) # delete first column of quadratic_test
+q_train_df = pd.concat([train_df[['ID_code', 'target']], pd.DataFrame(quadratic_train[:,1:])], axis=1) # delete first column of quadratic_train
+q_test_df = pd.concat([test_df['ID_code'], pd.DataFrame(quadratic_test[:,1:])], axis=1) # delete first column of quadratic_test
 
 
 #Clasification augment
